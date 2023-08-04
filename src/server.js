@@ -18,11 +18,6 @@ app.all("/err", (req, res, next) => {
     const err = new Error("Error");
     next(err);
 });
-app.use((_req, _res, next)=>{
-    const error = new Error("err Error occured! But luckily we catch it hehe");
-    error.status = 404;
-    next(error);
-});
 
 app.use((error, _req, res, _next)=>{
     if (error.status) {
