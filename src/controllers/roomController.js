@@ -1,7 +1,7 @@
 import {Firestore, Database} from "../config/firebaseInit";
 import {b56gen} from "../utils";
 import {globalCache} from "../server";
-import {sendMessage} from "../wsEventListener";
+import {sendMessage} from "../WSEventListener";
 import {internalGetUserInfo} from "./userController";
 require("dotenv").config();
 
