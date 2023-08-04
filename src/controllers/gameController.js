@@ -37,7 +37,7 @@ export const internalGetCorrectAnswer = async (rid) => {
         };
         axios.request(config)
             .then((response) => {
-                console.log("got answer: ", response.data.answers);
+                console.log(`Got answer for room ${rid}: ${response.data.answers}`);
                 globalCache.set("gameAnswer/" + rid, response.data.answers);
                 return resolve(response.data.answers);
             })

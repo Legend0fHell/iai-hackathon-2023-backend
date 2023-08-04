@@ -19,7 +19,6 @@ export const addShopItem = (id, item) => {
     Firestore.collection("shop").doc(id).set(
         item,
     ).then(() => {
-        console.log(item);
     });
 };
 
