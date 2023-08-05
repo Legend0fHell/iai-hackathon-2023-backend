@@ -6,6 +6,7 @@ import {internalGetUserInfo} from "./userController";
 require("dotenv").config();
 
 export const internalUpdateCacheListRoom = async (rid) => {
+    if (rid == null) return null;
     let arr = globalCache.get("listUserRoom/"+rid);
     if (arr) return arr;
     return new Promise((resolve) => {
