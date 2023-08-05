@@ -69,6 +69,7 @@ export const getGroupInfoList = async (req, res) => {
         const groupDesc = await internalGetGroup(groupId);
         Object.assign(groupInfo, groupDesc);
         const memberData = await Database.ref(`groups/${groupId}/members`).get();
+        if (!memberData.exists) continue;
         const memberCount = Object.keys(memberData.val()).length;
         Object.assign(groupInfo, {memberCount: memberCount});
         groupInfoList.push(groupInfo);

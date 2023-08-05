@@ -359,6 +359,34 @@ Response:
 }
 ```
 
+#### Route `/game/summary`
+Request (POST): Get the summary after the user finishes the game.
+
+- Requirement:
+    - The room's id.
+- Body:
+```
+{
+    "uid": "f2iEv5kKrtOua3bazpVFfW5t4hB2",
+    "data": "sEGg69"
+}
+```
+  
+Response:
+```
+{
+    "msg": "ok",
+    "data": {
+        "corCnt": 1,
+        "gems": 0,
+        "mode": 9,
+        "points": -331,
+        "ts": 1691219695607,
+        "totalTime": 95607
+    }
+}
+```
+
 #### Route `/game/context/get`
 Request (POST): Get the current player context of this game (saved locally in the player's browser).
 
