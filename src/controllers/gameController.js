@@ -66,12 +66,14 @@ export const internalCheckAllReady = async (status, rid) => {
 };
 
 export const internalCheckAllEnded = async (rid) => {
-    if (rid == null) return null;
+    if (rid == null) return false;
     const gameData = await internalGetGameInfo(rid);
-    if (gameData == false) return null;
+    if (gameData == false || gameData.players == null) return false;
+    console.log(gameData.players);
     // eslint-disable-next-line no-unused-vars
     for (const [key, value] of Object.entries(gameData.players)) {
-        if (value == null || (value.online == true && (value.ready < 2 || value.ended == false))) return false;
+        if (value == null) return false; // havent initialized yet?
+        if ((value.online == true && (value.ready < 2 || value.ended == false))) return false;
     }
     return true;
 };

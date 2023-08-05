@@ -66,18 +66,21 @@ io.on("connection", (socket) => {
         }
         const listenForAllReady = globalCache.get("listenForAllReady/" + rid);
         if (listenForAllReady) {
+            logInfo("Listening for all player ready");
             gameCtrl.internalCheckAllReady(2, rid).then((status) => {
                 if (status) {
                     logInfo("Game start phase 2", true);
                     io.to(rid).emit("get-start", 2);
                     globalCache.del("listenForAllReady/" + rid);
                     globalCache.set("listenForAllEnded/" + rid, true);
+                    logInfo("Ended listening for all player ready", true);
                 }
             });
         }
 
         const listenForAllEnded = globalCache.get("listenForAllEnded/" + rid);
         if (listenForAllEnded) {
+            logInfo("Listening for all player ended");
             gameCtrl.internalCheckAllEnded(rid).then((status) => {
                 if (status) {
                     logInfo("All players ended", true);
@@ -86,6 +89,7 @@ io.on("connection", (socket) => {
                     });
                     groupCtrl.internalGroupUpdateOverall(rid);
                     globalCache.del("listenForAllEnded/" + rid);
+                    logInfo("Ended listening for all player ended", true);
                     socket.offAny(allReady);
                 }
             });
