@@ -79,7 +79,9 @@ export const getGroupInfoList = async (req, res) => {
 export const internalGetAllGroupRooms = async (groupIdList) => {
     const roomsData = {};
     for (const groupId of groupIdList) {
-        const rooms = (await internalGetGroupProperties(groupId)).rooms;
+        const data = await internalGetGroupProperties(groupId);
+        if (data == null || data.rooms == null) continue;
+        const rooms = data.rooms;
         // eslint-disable-next-line guard-for-in
         for (const roomId in rooms) {
             roomsData[roomId] = await internalGetRoomInfo(roomId);
@@ -98,7 +100,7 @@ export const getALlGroupsRooms = async (req, res) => {
 export const getGroupProperties = async (req, res) => {
     const uid = req.body.uid;
     const data = req.body.data;
-    if (uid == "" || uid == null) {
+    if (uid == "" || uid == null || data == null || data.groupId == null) {
         return res.json({msg: "err invalid uid", data: null});
     }
     const groupId = data.groupId;
@@ -115,11 +117,11 @@ export const createGroup = async (req, res) => {
     if (uid == "" || uid == null) {
         return res.json({msg: "err invalid uid", data: null});
     }
-    const name = data.name;
-    const desc = data.desc;
-    const members = data.members;
-    const rooms = data.rooms;
-    const courses = data.courses;
+    const name = data.name || "";
+    const desc = data.desc || "";
+    const members = data.members || {};
+    const rooms = data.rooms || {};
+    const courses = data.courses || {};
     const groupId = b56gen(process.env.GROUP_ID_LENGTH || 6);
     while (true) {
         const tmpDoc = await Firestore.collection("group").doc(groupId).get();
@@ -177,7 +179,7 @@ export const deleteGroup = async (req, res) => {
 export const groupAddMember = async (req, res) => {
     const uid = req.body.uid;
     const data = req.body.data;
-    if (uid == "" || uid == null) {
+    if (uid == "" || uid == null || data == null || data.groupId == null || data.member == null) {
         return res.json({msg: "error", data: null});
     }
     const groupId = data.groupId;
@@ -204,7 +206,7 @@ export const groupAddMember = async (req, res) => {
 export const groupAddNewRoom = async (req, res) => {
     const uid = req.body.uid;
     const data = req.body.data;
-    if (uid == "" || uid == null) {
+    if (uid == "" || uid == null || data == null || data.groupId == null || data.roomData == null) {
         return res.json({msg: "err invalid uid", data: null});
     }
     const groupId = data.groupId;
@@ -227,7 +229,7 @@ export const groupAddNewRoom = async (req, res) => {
 export const groupAddExistingRoom = async (req, res) => {
     const uid = req.body.uid;
     const data = req.body.data;
-    if (uid == "" || uid == null) {
+    if (uid == "" || uid == null || data == null || data.groupId == null || data.roomId == null) {
         return res.json({msg: "err invalid uid", data: null});
     }
     const groupId = data.groupId;
@@ -302,7 +304,7 @@ export const internalGroupUpdateOverall = async (lastRoomId) => {
 export const groupGetRanking = async (req, res) => {
     const uid = req.body.uid;
     const data = req.body.data;
-    if (uid == "" || uid == null) {
+    if (uid == "" || uid == null || data == null || data.groupId == null) {
         return res.json({msg: "err invalid uid", data: null});
     }
     const groupId = data.groupId;
