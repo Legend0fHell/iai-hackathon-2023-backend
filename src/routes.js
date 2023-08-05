@@ -43,6 +43,9 @@ export const initWebRoutes = (app) => {
     app.route("/game/get")
         .post(gameCtrl.getGameStatus);
 
+    app.route("/game/summary")
+        .post(gameCtrl.getSummaryAfterGame);
+
     app.route("/game/context/get")
         .post(gameCtrl.getGameContext);
 

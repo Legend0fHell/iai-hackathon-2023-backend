@@ -69,6 +69,9 @@ io.on("connection", (socket) => {
             logInfo("Listening for all player ready");
             gameCtrl.internalCheckAllReady(2, rid).then((status) => {
                 if (status) {
+                    Database.ref(`rooms_data/${rid}/general`).update({
+                        sts: ServerValue.TIMESTAMP,
+                    });
                     logInfo("Game start phase 2", true);
                     io.to(rid).emit("get-start", 2);
                     globalCache.del("listenForAllReady/" + rid);

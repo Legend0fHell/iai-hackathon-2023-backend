@@ -69,7 +69,7 @@ export const internalCheckAllEnded = async (rid) => {
     if (rid == null) return false;
     const gameData = await internalGetGameInfo(rid);
     if (gameData == false || gameData.players == null) return false;
-    console.log(gameData.players);
+    if (globalCache.get("listenForAllReady/" + rid) != null) return false;
     // eslint-disable-next-line no-unused-vars
     for (const [key, value] of Object.entries(gameData.players)) {
         if (value == null) return false; // havent initialized yet?
@@ -179,6 +179,34 @@ export const internalAfterGame = async (uid, rid, points, gems, corCnt) => {
         });
     });
 };
+
+export const getSummaryAfterGame = async (req, res) => {
+    const uid = req.body.uid;
+    const data = req.body.data;
+    if (uid == null || uid == "" || data == null) {
+        return res.json({"msg": "err Data not vaild", "data": null});
+    }
+    let sts = globalCache.get(`roomStartTime/${data}`);
+    if (sts == null) {
+        const tmpSts = (await Database.ref(`rooms_data/${data}/general`).get()).val();
+        if (tmpSts != null) {
+            sts = tmpSts.sts;
+            globalCache.set(`roomStartTime/${data}`, sts);
+        }
+    }
+    const playerData = await Database.ref(`rooms_data/${data}/userPart/${uid}`).get();
+    if (!playerData.exists) {
+        return res.json({"msg": "err Data not vaild", "data": null});
+    } else {
+        const playerVal = playerData.val();
+        const totalTime = playerVal.ts - sts;
+        Object.assign(playerVal, {
+            totalTime,
+        });
+        return res.json({"msg": "ok", "data": playerVal});
+    }
+};
+
 
 export const internalCheckOwner = async (uid, rid) => {
     if (uid == null || rid == null) return false;
