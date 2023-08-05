@@ -162,7 +162,24 @@ export const internalCalcGem = async (rid, points) => {
 };
 
 export const internalAfterGame = async (uid, rid, points, gems, corCnt) => {
+    if (uid == null || rid == null) return null;
     await internalUpdateUserBalance(uid, "deposit", gems);
+    const gameData = await internalGetGameInfo(rid);
+    if (gameData == false) return null;
+    if (gameData.players[uid] == null) {
+        Object.assign(gameData.players, {
+            [uid]: {
+                online: false,
+                ready: 2,
+                ended: true,
+            },
+        });
+    } else {
+        Object.assign(gameData.players[uid], {
+            ended: true,
+        });
+    }
+    globalCache.set("gameDataPublic/" + rid, gameData);
     return new Promise((resolve) => {
         Database.ref(`rooms_data/${rid}/userPart/${uid}`).update({
             points,
@@ -208,7 +225,6 @@ export const getSummaryAfterGame = async (req, res) => {
         return res.json({"msg": "ok", "data": playerVal});
     }
 };
-
 
 export const internalCheckOwner = async (uid, rid) => {
     if (uid == null || rid == null) return false;
