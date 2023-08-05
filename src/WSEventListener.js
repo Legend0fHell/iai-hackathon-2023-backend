@@ -1,6 +1,6 @@
 import {Server} from "socket.io";
 import {globalCache} from "./server";
-import {Firestore} from "./config/firebaseInit";
+import {Firestore, Database, ServerValue} from "./config/firebaseInit";
 const gameCtrl = require("./controllers/gameController");
 const groupCtrl = require("./controllers/groupController");
 
