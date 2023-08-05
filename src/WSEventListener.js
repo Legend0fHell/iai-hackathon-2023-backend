@@ -14,6 +14,7 @@ export const io = new Server(ws_port, {
         origin: [
             "http://localhost:" + port,
             "http://localhost:" + ws_port,
+            "http://localhost:3000",
             fr_origin,
         ],
     },

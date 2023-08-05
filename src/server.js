@@ -1,4 +1,6 @@
 import express from "express";
+const https = require("https");
+const fs = require("fs");
 import bodyParser from "body-parser";
 import {initWebRoutes} from "./routes";
 const cors = require("cors");
@@ -33,8 +35,10 @@ app.use((error, _req, res, _next)=>{
 initWebRoutes(app);
 
 const port = process.env.BACKEND_PORT || 5678;
-
-app.listen(port, () => {
+https.createServer({
+    cert: fs.readFileSync("/etc/letsencrypt/live/iaihackathon.engineer/fullchain.pem"),
+    key: fs.readFileSync("/etc/letsencrypt/live/iaihackathon.engineer/privkey.pem"),
+}, app).listen(port, () => {
     console.log("I'm a cute backend and as the brain of this project I'm happy to serve everyone' request at port " + port);
 });
 
