@@ -194,6 +194,7 @@ export const getSummaryAfterGame = async (req, res) => {
             globalCache.set(`roomStartTime/${data}`, sts);
         }
     }
+    const totalQues = (await internalGetRoomInfo(data)).qnum;
     const playerData = await Database.ref(`rooms_data/${data}/userPart/${uid}`).get();
     if (!playerData.exists) {
         return res.json({"msg": "err Data not vaild", "data": null});
@@ -202,6 +203,7 @@ export const getSummaryAfterGame = async (req, res) => {
         const totalTime = playerVal.ts - sts;
         Object.assign(playerVal, {
             totalTime,
+            totalQues,
         });
         return res.json({"msg": "ok", "data": playerVal});
     }

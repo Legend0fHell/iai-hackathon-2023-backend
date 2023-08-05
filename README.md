@@ -382,7 +382,8 @@ Response:
         "mode": 9,
         "points": -331,
         "ts": 1691219695607,
-        "totalTime": 95607
+        "totalTime": 95607,
+        "totalQues": 0
     }
 }
 ```
