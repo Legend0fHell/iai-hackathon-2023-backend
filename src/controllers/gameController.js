@@ -32,7 +32,7 @@ export const internalGetCorrectAnswer = async (rid) => {
         const config = {
             method: "get",
             maxBodyLength: Infinity,
-            url: `https://127.0.0.1:${process.env.BACKEND_FLASK_PORT}/data/${testId}/answers`,
+            url: `https://iaihackathon.engineer:${process.env.BACKEND_FLASK_PORT}/data/${testId}/answers`,
             headers: {},
         };
         axios.request(config)
