@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
     let correctStreak = 0;
     let incorStreak = 0;
     let corCnt = 0;
+    let totCnt = 0;
     let timestamp = 0;
     let busy = false;
     console.info(`[id=${socket.id}] Client connected`);
@@ -136,6 +137,7 @@ io.on("connection", (socket) => {
                     status ? "" : "in"
                 }correct, ${delta} points`,
             );
+            totCnt += 1;
             points += delta;
             if (status) {
                 corCnt += 1;
@@ -146,7 +148,7 @@ io.on("connection", (socket) => {
                 correctStreak = 0;
             }
             logInfo("Player info updated");
-            io.to(rid).emit("get-playerData", uid, correctStreak, corCnt, points);
+            io.to(rid).emit("get-playerData", uid, correctStreak, corCnt, totCnt, points);
             busy = false;
         });
     });

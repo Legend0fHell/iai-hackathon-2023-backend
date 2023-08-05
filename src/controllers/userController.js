@@ -49,7 +49,7 @@ export const setUserInfo = (req, res) => {
 export const initRegisterUser = (req, res) => {
     const uid = req.body.uid;
     const data = req.body.data;
-    // if (uid == null || uid == "" || data == null || data.uid != uid) return res.json({"msg": "err User not vaild", "data": null});
+    if (uid == null || uid == "" || data == null || data.uid != uid) return res.json({"msg": "err User not vaild", "data": null});
     setUserPossession(uid, {balance: 100, items: {}});
     Firestore.collection("user_data").doc(uid).set(data)
         .then(() => {
