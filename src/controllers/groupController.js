@@ -252,6 +252,9 @@ export const groupAddExistingRoom = async (req, res) => {
 };
 
 export const internalGroupUpdatePlayer = async (groupId, userId, points) => {
+    if (groupId == null || groupId == "" || userId == null || userId == "" || points == null) {
+        return console.log({msg: "err invalid data", data: null});
+    }
     const group = await internalGetGroup(groupId);
     if (group == null) {
         return console.log({msg: "err invalid group", data: null});
