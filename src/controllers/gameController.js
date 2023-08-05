@@ -139,6 +139,7 @@ export const internalCalcPoint = async (uid, rid, status, corStreak, incorStreak
     if (data.diff === "Easy") data.diff = 0.2;
     if (data.diff === "Normal") data.diff = 0.5;
     if (data.diff === "Hard") data.diff = 0.9;
+    data.tframe = parseInt(data.tframe);
     let scP = 1;
     let scE = 1;
     if (pStats.hp == 1) {
