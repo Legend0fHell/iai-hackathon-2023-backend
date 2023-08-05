@@ -51,7 +51,7 @@ export const internalGetCorrectAnswer = async (rid) => {
 export const internalCheckAns = async (noQues, ans, uid, rid) => {
     if (uid == null || rid == null) return null;
     const gameAns = await internalGetCorrectAnswer(rid);
-    return (gameAns[noQues] == ans);
+    return (gameAns[parseInt(noQues)] == parseInt(ans));
 };
 
 export const internalCheckAllReady = async (status, rid) => {
