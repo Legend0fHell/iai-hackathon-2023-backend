@@ -32,7 +32,7 @@ export const internalGetCorrectAnswer = async (rid) => {
         const config = {
             method: "get",
             maxBodyLength: Infinity,
-            url: `http://127.0.0.1:${process.env.BACKEND_FLASK_PORT}/data/${testId}/answers`,
+            url: `https://iaihackathon.engineer:${process.env.BACKEND_FLASK_PORT}/data/${testId}/answers`,
             headers: {},
         };
         axios.request(config)
@@ -51,7 +51,7 @@ export const internalGetCorrectAnswer = async (rid) => {
 export const internalCheckAns = async (noQues, ans, uid, rid) => {
     if (uid == null || rid == null) return null;
     const gameAns = await internalGetCorrectAnswer(rid);
-    return (gameAns[noQues] == ans);
+    return (gameAns[parseInt(noQues)] == parseInt(ans));
 };
 
 export const internalCheckAllReady = async (status, rid) => {
@@ -72,8 +72,7 @@ export const internalCheckAllEnded = async (rid) => {
     if (globalCache.get("listenForAllReady/" + rid) != null) return false;
     // eslint-disable-next-line no-unused-vars
     for (const [key, value] of Object.entries(gameData.players)) {
-        if (value == null) return false; // havent initialized yet?
-        if ((value.online == true && (value.ready < 2 || value.ended == false))) return false;
+        if (value.online == true && value.ended == false) return false;
     }
     return true;
 };

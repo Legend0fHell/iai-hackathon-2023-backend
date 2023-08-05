@@ -1,4 +1,6 @@
 import {Server} from "socket.io";
+const {readFileSync} = require("fs");
+const {createServer} = require("https");
 import {globalCache} from "./server";
 import {Firestore, Database, ServerValue} from "./config/firebaseInit";
 const gameCtrl = require("./controllers/gameController");
@@ -6,10 +8,16 @@ const groupCtrl = require("./controllers/groupController");
 
 require("dotenv").config();
 
+const httpsServer = createServer({
+    key: readFileSync("/etc/letsencrypt/live/iaihackathon.engineer/privkey.pem"),
+    cert: readFileSync("/etc/letsencrypt/live/iaihackathon.engineer/fullchain.pem"),
+});
+
 const port = process.env.BACKEND_PORT || 5678;
 const ws_port = process.env.BACKEND_WS_PORT || 3456;
 const fr_origin = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
-export const io = new Server(ws_port, {
+
+export const io = new Server(httpsServer, {
     cors: {
         origin: [
             "http://localhost:" + port,
@@ -19,6 +27,7 @@ export const io = new Server(ws_port, {
         ],
     },
 });
+
 console.log("I can satisfy everyone' need in real-time at port " + ws_port);
 
 io.on("connection", (socket) => {
@@ -187,6 +196,8 @@ io.on("connection", (socket) => {
         busy = false;
     });
 });
+
+httpsServer.listen(ws_port);
 
 export const sendMessage = (roomId, key, message) => {
     if (!roomId || process.env.BACKEND_WS_GLOBAL_EMIT === "True") {
