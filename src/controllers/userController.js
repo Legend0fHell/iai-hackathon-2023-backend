@@ -51,7 +51,7 @@ export const initRegisterUser = (req, res) => {
     const data = req.body.data;
     // if (uid == null || uid == "" || data == null || data.uid != uid) return res.json({"msg": "err User not vaild", "data": null});
     setUserPossession(uid, {balance: 100, items: {}});
-    Firestore.collection("user_data").doc(uid).update(data)
+    Firestore.collection("user_data").doc(uid).set(data)
         .then(() => {
             globalCache.set("users/" + uid, data);
             return res.json({"msg": "ok", "data": null});
