@@ -72,7 +72,7 @@ export const internalCheckAllEnded = async (rid) => {
     if (globalCache.get("listenForAllReady/" + rid) != null) return false;
     // eslint-disable-next-line no-unused-vars
     for (const [key, value] of Object.entries(gameData.players)) {
-        if (value.online == true && value.ended == false) return false;
+        if (key != gameData.owner && value.online == true && value.ended == false) return false;
     }
     return true;
 };
